@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.CEndUserMapper">
+    
+    <resultMap type="CEndUser" id="CEndUserResult">
+        <result property="id"    column="id"    />
+        <result property="phone"    column="phone"    />
+        <result property="password"    column="password"    />
+        <result property="lastLoginTime"    column="lastLoginTime"    />
+        <result property="passwordUpdateTime"    column="passwordUpdateTime"    />
+        <result property="accountCreateTime"    column="accountCreateTime"    />
+        <result property="type"    column="type"    />
+        <result property="profileId"    column="profileId"    />
+    </resultMap>
+
+    <resultMap id="CEndUserProfileResult" type="CEndUser" extends="CEndUserResult">
+        <collection property="profileList" notNullColumn="sub_id" javaType="java.util.List" resultMap="ProfileResult" />
+    </resultMap>
+
+    <resultMap type="Profile" id="ProfileResult">
+        <result property="id"    column="sub_id"    />
+        <result property="name"    column="sub_name"    />
+        <result property="gender"    column="sub_gender"    />
+        <result property="sign"    column="sub_sign"    />
+        <result property="avatar"    column="sub_avatar"    />
+    </resultMap>
+
+    <sql id="selectCEndUserVo">
+        select id, phone, password, lastLoginTime, passwordUpdateTime, accountCreateTime, type, profileId from user
+    </sql>
+
+    <select id="selectCEndUserList" parameterType="CEndUser" resultMap="CEndUserResult">
+        <include refid="selectCEndUserVo"/>
+        <where>  
+            <if test="id != null  and id != ''"> and id = #{id}</if>
+            <if test="phone != null  and phone != ''"> and phone like concat('%', #{phone}, '%')</if>
+            <if test="params.beginLastLoginTime != null and params.beginLastLoginTime != '' and params.endLastLoginTime != null and params.endLastLoginTime != ''"> and lastLoginTime between #{params.beginLastLoginTime} and #{params.endLastLoginTime}</if>
+            <if test="params.beginPasswordUpdateTime != null and params.beginPasswordUpdateTime != '' and params.endPasswordUpdateTime != null and params.endPasswordUpdateTime != ''"> and passwordUpdateTime between #{params.beginPasswordUpdateTime} and #{params.endPasswordUpdateTime}</if>
+            <if test="params.beginAccountCreateTime != null and params.beginAccountCreateTime != '' and params.endAccountCreateTime != null and params.endAccountCreateTime != ''"> and accountCreateTime between #{params.beginAccountCreateTime} and #{params.endAccountCreateTime}</if>
+            <if test="profileId != null "> and profileId = #{profileId}</if>
+        </where>
+    </select>
+    
+    <select id="selectCEndUserById" parameterType="String" resultMap="CEndUserProfileResult">
+        select a.id, a.phone, a.password, a.lastLoginTime, a.passwordUpdateTime, a.accountCreateTime, a.type, a.profileId,
+ b.id as sub_id, b.name as sub_name, b.gender as sub_gender, b.sign as sub_sign, b.avatar as sub_avatar
+        from user a
+        left join profile b on b.id = a.id
+        where a.id = #{id}
+    </select>
+        
+    <insert id="insertCEndUser" parameterType="CEndUser">
+        insert into user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="phone != null and phone != ''">phone,</if>
+            <if test="password != null">password,</if>
+            <if test="lastLoginTime != null">lastLoginTime,</if>
+            <if test="passwordUpdateTime != null">passwordUpdateTime,</if>
+            <if test="accountCreateTime != null">accountCreateTime,</if>
+            <if test="type != null and type != ''">type,</if>
+            <if test="profileId != null">profileId,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="phone != null and phone != ''">#{phone},</if>
+            <if test="password != null">#{password},</if>
+            <if test="lastLoginTime != null">#{lastLoginTime},</if>
+            <if test="passwordUpdateTime != null">#{passwordUpdateTime},</if>
+            <if test="accountCreateTime != null">#{accountCreateTime},</if>
+            <if test="type != null and type != ''">#{type},</if>
+            <if test="profileId != null">#{profileId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCEndUser" parameterType="CEndUser">
+        update user
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="phone != null and phone != ''">phone = #{phone},</if>
+            <if test="password != null">password = #{password},</if>
+            <if test="lastLoginTime != null">lastLoginTime = #{lastLoginTime},</if>
+            <if test="passwordUpdateTime != null">passwordUpdateTime = #{passwordUpdateTime},</if>
+            <if test="accountCreateTime != null">accountCreateTime = #{accountCreateTime},</if>
+            <if test="type != null and type != ''">type = #{type},</if>
+            <if test="profileId != null">profileId = #{profileId},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCEndUserById" parameterType="String">
+        delete from user where id = #{id}
+    </delete>
+
+    <delete id="deleteCEndUserByIds" parameterType="String">
+        delete from user where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+    <delete id="deleteProfileByIds" parameterType="String">
+        delete from profile where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteProfileById" parameterType="String">
+        delete from profile where id = #{id}
+    </delete>
+
+    <insert id="batchProfile">
+        insert into profile( id, name, gender, sign, avatar) values
+		<foreach item="item" index="index" collection="list" separator=",">
+            ( #{item.id}, #{item.name}, #{item.gender}, #{item.sign}, #{item.avatar})
+        </foreach>
+    </insert>
+</mapper>

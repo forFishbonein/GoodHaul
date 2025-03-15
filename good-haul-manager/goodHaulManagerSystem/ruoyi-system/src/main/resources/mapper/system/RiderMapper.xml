@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.RiderMapper">
+    
+    <resultMap type="Rider" id="RiderResult">
+        <result property="id"    column="id"    />
+        <result property="account"    column="account"    />
+        <result property="password"    column="password"    />
+        <result property="lastLoginTime"    column="lastLoginTime"    />
+        <result property="lastFinishTime"    column="lastFinishTime"    />
+        <result property="accountCreateTime"    column="accountCreateTime"    />
+        <result property="isLeisure"    column="isLeisure"    />
+        <result property="driverType"    column="driverType"    />
+        <result property="brand"    column="brand"    />
+        <result property="color"    column="color"    />
+        <result property="enrollTime"    column="enrollTime"    />
+        <result property="name"    column="name"    />
+        <result property="phone"    column="phone"    />
+        <result property="finishOrderNumber"    column="finishOrderNumber"    />
+        <result property="type"    column="type"    />
+    </resultMap>
+
+    <sql id="selectRiderVo">
+        select id, account, password, lastLoginTime, lastFinishTime, accountCreateTime, isLeisure, driverType, brand, color, enrollTime, name, phone, finishOrderNumber, type from rider
+    </sql>
+
+    <select id="selectRiderList" parameterType="Rider" resultMap="RiderResult">
+        <include refid="selectRiderVo"/>
+        <where>  
+            <if test="id != null  and id != ''"> and id = #{id}</if>
+            <if test="account != null  and account != ''"> and account = #{account}</if>
+            <if test="params.beginLastLoginTime != null and params.beginLastLoginTime != '' and params.endLastLoginTime != null and params.endLastLoginTime != ''"> and lastLoginTime between #{params.beginLastLoginTime} and #{params.endLastLoginTime}</if>
+            <if test="params.beginLastFinishTime != null and params.beginLastFinishTime != '' and params.endLastFinishTime != null and params.endLastFinishTime != ''"> and lastFinishTime between #{params.beginLastFinishTime} and #{params.endLastFinishTime}</if>
+            <if test="params.beginAccountCreateTime != null and params.beginAccountCreateTime != '' and params.endAccountCreateTime != null and params.endAccountCreateTime != ''"> and accountCreateTime between #{params.beginAccountCreateTime} and #{params.endAccountCreateTime}</if>
+            <if test="isLeisure != null "> and isLeisure = #{isLeisure}</if>
+            <if test="driverType != null  and driverType != ''"> and driverType = #{driverType}</if>
+            <if test="brand != null  and brand != ''"> and brand like concat('%', #{brand}, '%')</if>
+            <if test="color != null  and color != ''"> and color = #{color}</if>
+            <if test="params.beginEnrollTime != null and params.beginEnrollTime != '' and params.endEnrollTime != null and params.endEnrollTime != ''"> and enrollTime between #{params.beginEnrollTime} and #{params.endEnrollTime}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="phone != null  and phone != ''"> and phone like concat('%', #{phone}, '%')</if>
+            <if test="finishOrderNumber != null "> and finishOrderNumber = #{finishOrderNumber}</if>
+        </where>
+    </select>
+    
+    <select id="selectRiderById" parameterType="String" resultMap="RiderResult">
+        <include refid="selectRiderVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertRider" parameterType="Rider">
+        insert into rider
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="account != null and account != ''">account,</if>
+            <if test="password != null and password != ''">password,</if>
+            <if test="lastLoginTime != null">lastLoginTime,</if>
+            <if test="lastFinishTime != null">lastFinishTime,</if>
+            <if test="accountCreateTime != null and accountCreateTime != ''">accountCreateTime,</if>
+            <if test="isLeisure != null">isLeisure,</if>
+            <if test="driverType != null and driverType != ''">driverType,</if>
+            <if test="brand != null">brand,</if>
+            <if test="color != null">color,</if>
+            <if test="enrollTime != null">enrollTime,</if>
+            <if test="name != null and name != ''">name,</if>
+            <if test="phone != null and phone != ''">phone,</if>
+            <if test="finishOrderNumber != null">finishOrderNumber,</if>
+            <if test="type != null and type != ''">type,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="account != null and account != ''">#{account},</if>
+            <if test="password != null and password != ''">#{password},</if>
+            <if test="lastLoginTime != null">#{lastLoginTime},</if>
+            <if test="lastFinishTime != null">#{lastFinishTime},</if>
+            <if test="accountCreateTime != null and accountCreateTime != ''">#{accountCreateTime},</if>
+            <if test="isLeisure != null">#{isLeisure},</if>
+            <if test="driverType != null and driverType != ''">#{driverType},</if>
+            <if test="brand != null">#{brand},</if>
+            <if test="color != null">#{color},</if>
+            <if test="enrollTime != null">#{enrollTime},</if>
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="phone != null and phone != ''">#{phone},</if>
+            <if test="finishOrderNumber != null">#{finishOrderNumber},</if>
+            <if test="type != null and type != ''">#{type},</if>
+         </trim>
+    </insert>
+
+    <update id="updateRider" parameterType="Rider">
+        update rider
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="account != null and account != ''">account = #{account},</if>
+            <if test="password != null and password != ''">password = #{password},</if>
+            <if test="lastLoginTime != null">lastLoginTime = #{lastLoginTime},</if>
+            <if test="lastFinishTime != null">lastFinishTime = #{lastFinishTime},</if>
+            <if test="accountCreateTime != null and accountCreateTime != ''">accountCreateTime = #{accountCreateTime},</if>
+            <if test="isLeisure != null">isLeisure = #{isLeisure},</if>
+            <if test="driverType != null and driverType != ''">driverType = #{driverType},</if>
+            <if test="brand != null">brand = #{brand},</if>
+            <if test="color != null">color = #{color},</if>
+            <if test="enrollTime != null">enrollTime = #{enrollTime},</if>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="phone != null and phone != ''">phone = #{phone},</if>
+            <if test="finishOrderNumber != null">finishOrderNumber = #{finishOrderNumber},</if>
+            <if test="type != null and type != ''">type = #{type},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteRiderById" parameterType="String">
+        delete from rider where id = #{id}
+    </delete>
+
+    <delete id="deleteRiderByIds" parameterType="String">
+        delete from rider where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

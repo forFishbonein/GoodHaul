@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.DriverMapper">
+    
+    <resultMap type="Driver" id="DriverResult">
+        <result property="id"    column="id"    />
+        <result property="account"    column="account"    />
+        <result property="password"    column="password"    />
+        <result property="name"    column="name"    />
+        <result property="phone"    column="phone"    />
+        <result property="finishOrderNumber"    column="finishOrderNumber"    />
+        <result property="lastLoginTime"    column="lastLoginTime"    />
+        <result property="lastFinishTime"    column="lastFinishTime"    />
+        <result property="accountCreateTime"    column="accountCreateTime"    />
+        <result property="driverType"    column="driverType"    />
+        <result property="type"    column="type"    />
+    </resultMap>
+
+    <sql id="selectDriverVo">
+        select id, account, password, name, phone, finishOrderNumber, lastLoginTime, lastFinishTime, accountCreateTime, driverType, type from driver
+    </sql>
+
+    <select id="selectDriverList" parameterType="Driver" resultMap="DriverResult">
+        <include refid="selectDriverVo"/>
+        <where>  
+            <if test="id != null  and id != ''"> and id = #{id}</if>
+            <if test="account != null  and account != ''"> and account = #{account}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="phone != null  and phone != ''"> and phone like concat('%', #{phone}, '%')</if>
+            <if test="params.beginFinishOrderNumber != null and params.beginFinishOrderNumber != '' and params.endFinishOrderNumber != null and params.endFinishOrderNumber != ''"> and finishOrderNumber between #{params.beginFinishOrderNumber} and #{params.endFinishOrderNumber}</if>
+            <if test="params.beginLastLoginTime != null and params.beginLastLoginTime != '' and params.endLastLoginTime != null and params.endLastLoginTime != ''"> and lastLoginTime between #{params.beginLastLoginTime} and #{params.endLastLoginTime}</if>
+            <if test="params.beginLastFinishTime != null and params.beginLastFinishTime != '' and params.endLastFinishTime != null and params.endLastFinishTime != ''"> and lastFinishTime between #{params.beginLastFinishTime} and #{params.endLastFinishTime}</if>
+            <if test="params.beginAccountCreateTime != null and params.beginAccountCreateTime != '' and params.endAccountCreateTime != null and params.endAccountCreateTime != ''"> and accountCreateTime between #{params.beginAccountCreateTime} and #{params.endAccountCreateTime}</if>
+            <if test="driverType != null  and driverType != ''"> and driverType = #{driverType}</if>
+            <if test="type != null  and type != ''"> and type = #{type}</if>
+        </where>
+    </select>
+    
+    <select id="selectDriverById" parameterType="String" resultMap="DriverResult">
+        <include refid="selectDriverVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertDriver" parameterType="Driver">
+        insert into driver
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="account != null and account != ''">account,</if>
+            <if test="password != null and password != ''">password,</if>
+            <if test="name != null and name != ''">name,</if>
+            <if test="phone != null and phone != ''">phone,</if>
+            <if test="finishOrderNumber != null">finishOrderNumber,</if>
+            <if test="lastLoginTime != null">lastLoginTime,</if>
+            <if test="lastFinishTime != null">lastFinishTime,</if>
+            <if test="accountCreateTime != null and accountCreateTime != ''">accountCreateTime,</if>
+            <if test="driverType != null and driverType != ''">driverType,</if>
+            <if test="type != null and type != ''">type,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="account != null and account != ''">#{account},</if>
+            <if test="password != null and password != ''">#{password},</if>
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="phone != null and phone != ''">#{phone},</if>
+            <if test="finishOrderNumber != null">#{finishOrderNumber},</if>
+            <if test="lastLoginTime != null">#{lastLoginTime},</if>
+            <if test="lastFinishTime != null">#{lastFinishTime},</if>
+            <if test="accountCreateTime != null and accountCreateTime != ''">#{accountCreateTime},</if>
+            <if test="driverType != null and driverType != ''">#{driverType},</if>
+            <if test="type != null and type != ''">#{type},</if>
+         </trim>
+    </insert>
+
+    <update id="updateDriver" parameterType="Driver">
+        update driver
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="account != null and account != ''">account = #{account},</if>
+            <if test="password != null and password != ''">password = #{password},</if>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="phone != null and phone != ''">phone = #{phone},</if>
+            <if test="finishOrderNumber != null">finishOrderNumber = #{finishOrderNumber},</if>
+            <if test="lastLoginTime != null">lastLoginTime = #{lastLoginTime},</if>
+            <if test="lastFinishTime != null">lastFinishTime = #{lastFinishTime},</if>
+            <if test="accountCreateTime != null and accountCreateTime != ''">accountCreateTime = #{accountCreateTime},</if>
+            <if test="driverType != null and driverType != ''">driverType = #{driverType},</if>
+            <if test="type != null and type != ''">type = #{type},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteDriverById" parameterType="String">
+        delete from driver where id = #{id}
+    </delete>
+
+    <delete id="deleteDriverByIds" parameterType="String">
+        delete from driver where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

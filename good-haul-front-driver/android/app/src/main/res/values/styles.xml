@@ -1,0 +1,12 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="android:editTextBackground">@drawable/rn_edit_text_material</item>
+        <!--  添加这一句，就会全屏，statebar底部也会显示启动图， -->
+<!--         <item name="android:windowTranslucentStatus">true</item>-->
+        <item name="android:windowBackground">@drawable/launch_screen</item>
+    </style>
+
+</resources>
