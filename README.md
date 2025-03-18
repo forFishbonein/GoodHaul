@@ -3,7 +3,7 @@
 包含全部前后端代码，系统分为用户端、司机端、管理端三端
 
 - 官网地址：http://hidocs.vip:82
-- 产品介绍视频：【好运来-哔哩哔哩】 https://b23.tv/aX1w0T4
+- 产品介绍视频：【好运来-系统演示视频-哔哩哔哩】https://b23.tv/qSzrCFr
 - 项目介绍 PPT：[好运来项目汇报](https://github.com/forFishbonein/GoodHaul/raw/refs/heads/main/%E6%9C%80%E6%96%B0-%E5%9F%BA%E4%BA%8EReact%20Native%E7%9A%84%E5%90%8C%E5%9F%8E%E8%B4%A7%E8%BF%90APP%E7%9A%84%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0%E2%80%94%E9%83%9D%E6%96%87%E6%B5%B7.pptx)
 
 1）技术选型与应用：React Native全家桶、Redux Toolkit、NativeBase、NestJS、TypeORM、TypeScript、Mysql、Redis、MongoDB、WebSocket、腾讯地图SDK、RouYi-Vue
